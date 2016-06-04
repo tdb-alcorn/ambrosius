@@ -1,7 +1,14 @@
 from http.server import HTTPServer, SimpleHTTPRequestHandler
-from html.parser import HTMLParser
 import os
+import sys
 import logging
+
+class LoggerWriter:
+    def __init__(self, level):
+        self.level = level
+    def write(self, message):
+        if message != "\n":
+            self.level("<p>" + message.strip() + "</p>")
 
 class SpaceHandler(SimpleHTTPRequestHandler):
     def do_GET(self):
@@ -31,4 +38,8 @@ def run(server_class=HTTPServer, handler_class=SpaceHandler):
     httpd.serve_forever()
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, filename="server.log.html", filemode="a+",
+            format="<p> %(asctime)-15s %(levelname)-8s %(message)s </p>")
+    logging.warning("hi ho away we go!")
+    sys.stderr = LoggerWriter(logging.info)
     run()
