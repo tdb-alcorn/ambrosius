@@ -1,0 +1,54 @@
+<html>
+    <meta charset="utf-8"/>
+    <script>
+        function helper(canvas) {
+            var ctx = canvas.getContext("2d");
+            return {
+                size: function size(width, height) {
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+                },
+                background: function background(n) {
+                    canvas.style.backgroundColor = "rgba(255,255,255,"+n.toString()+")";
+                },
+                line: function line(x1,y1,x2,y2) {
+                    ctx.beginPath();
+                    ctx.moveTo(x1, y1);
+                    ctx.lineTo(x2, y2);
+                    ctx.closePath();
+                    ctx.stroke();
+                },
+                random: function random(n) {
+                    return Math.random() * n;
+                },
+            }
+        }
+
+        function run() {
+            var canvas = document.getElementById("canvas");
+            functions = helper(canvas);
+            size = functions.size;
+            background = functions.background;
+            line = functions.line;
+            random = functions.random;
+
+            /** Casey Reas's code. **/
+            size(3200, 2000);
+            background(255);
+            for (var y = 0; y < canvas.height; y += 80){
+                for (var x = 0; x < canvas.width; x += 80){
+                    if (random(1) > 0.5) {
+                        line(x, y, x+80, y+80);
+                    } else {
+                        line(x, y+80, x+80, y);
+                    } 
+                } 
+            }
+            /** End Casey Reas's code. **/
+        }
+    </script>
+    <body onload="run();">
+        <canvas id="canvas"></canvas>
+    </body>
+</html>
